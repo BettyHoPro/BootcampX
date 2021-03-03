@@ -1,0 +1,1 @@
+CREATE TABLE assistance_requests 
