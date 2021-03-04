@@ -9,7 +9,8 @@ const pool = new Pool({
 });
 
 const cmlVal1 = process.argv[2];
-const cmlVal2 = process.argv[3];
+const cmlVal2 = process.argv[3] || 5;
+const values = [`${cmlVal1}%`, cmlVal2];
 
 pool
   .query(
@@ -17,10 +18,10 @@ pool
 SELECT students.id as student_id, students.name, cohorts.name as cohort
 FROM students
 JOIN cohorts ON students.cohort_id = cohorts.id
-WHERE cohorts.name LIKE '${cmlVal1}%'
-LIMIT ${cmlVal2 || 5};
+WHERE cohorts.name LIKE $1
+LIMIT $2;
 `
-  )
+ , values)
   .then((response) => {
     response.rows.forEach((user) => {
       console.log(

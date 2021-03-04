@@ -8,6 +8,10 @@ const pool = new Pool({
   port: 5432,
 });
 
+
+const cmlVal1 = process.argv[2] || 'JUL02';
+const values = [`${cmlVal1}`];
+
 pool
   .query(
     `
@@ -16,10 +20,10 @@ pool
     JOIN assistance_requests ON assistance_requests.teacher_id = teachers.id 
     JOIN students ON students.id = assistance_requests.student_id
     JOIN cohorts ON cohorts.id = students.cohort_id
-    WHERE cohorts.name = '${ process.argv[2] || 'JUL02'}'
+    WHERE cohorts.name = $1
     ORDER BY teacher;
 `
-  )
+  , values)
   .then((response) => {
     console.log('connected');
     response.rows.forEach((user) => {
